@@ -124,11 +124,17 @@ struct EggCreateAccountView: View {
                     
                     VStack(spacing: 15) {
                         Button(action: {
-                            if eggCreateAccountModel.password == eggCreateAccountModel.confirmPassword {
+                            if eggCreateAccountModel.email.isEmpty ||
+                               eggCreateAccountModel.password.isEmpty ||
+                               eggCreateAccountModel.confirmPassword.isEmpty ||
+                               eggCreateAccountModel.username.isEmpty {
+                                showAlert = true
+                                alertMessage = "Please fill all fields"
+                            } else if eggCreateAccountModel.password == eggCreateAccountModel.confirmPassword {
                                 let success = UserDefaultsManager().register(email: eggCreateAccountModel.email,
-                                                       password: eggCreateAccountModel.password,
-                                                       nickname: eggCreateAccountModel.username,
-                                                       image: eggCreateAccountModel.selectedImage)
+                                                                             password: eggCreateAccountModel.password,
+                                                                             nickname: eggCreateAccountModel.username,
+                                                                             image: eggCreateAccountModel.selectedImage)
                                 if success {
                                     eggCreateAccountModel.isLog = true
                                 } else {
