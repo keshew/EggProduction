@@ -7,6 +7,13 @@ struct EggAddReminderView: View {
     @State private var alertMessage = ""
     var isEditing: Bool
     var remindModel: ReminderModel
+    
+    init(isEditing: Bool, remindModel: ReminderModel) {
+         self.isEditing = isEditing
+         self.remindModel = remindModel
+         _eggAddReminderModel = StateObject(wrappedValue: EggAddReminderViewModel(reminder: isEditing ? remindModel : nil))
+     }
+    
     var body: some View {
         ZStack {
             Color(.mainYellow)
@@ -60,6 +67,7 @@ struct EggAddReminderView: View {
                                 .padding(.leading, UIScreen.main.bounds.width > 700 ? 15 : 0)
                                 
                                 TimeTF(time: $eggAddReminderModel.time,
+                                       date: $eggAddReminderModel.date,
                                        text: isEditing ? eggAddReminderModel.formatTime(reminderTime: remindModel.time) : "Time")
                                 
                                 if UIScreen.main.bounds.width > 700 {

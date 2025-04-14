@@ -1,7 +1,6 @@
 import SwiftUI
 
 class EggAddReminderViewModel: ObservableObject {
-    let contact = EggAddReminderModel()
     @Published var title = ""
     @Published var desc = ""
     @Published var date = Date(timeIntervalSince1970: 0)
@@ -18,6 +17,43 @@ class EggAddReminderViewModel: ObservableObject {
     @Published var fourth = false
     @Published var fifth = false
     
+    init(reminder: ReminderModel? = nil) {
+        if let reminder = reminder {
+            isNever = false
+            first = false
+            self.title = reminder.name
+            self.desc = ""
+            self.date = reminder.date
+            self.time = reminder.time
+            
+            switch reminder.repeatTime {
+            case .Never:
+                self.isNever = true
+            case .Daily:
+                self.isDaily = true
+            case .Weekly:
+                self.isWeekly = true
+            case .Mounthly:
+                self.isMountly = true
+            case .Yearly:
+                self.isYearly = true
+            }
+            
+            switch reminder.category {
+            case .first:
+                self.first = true
+            case .second:
+                self.second = true
+            case .third:
+                self.third = true
+            case .fourth:
+                self.fourth = true
+            case .fifth:
+                self.fifth = true
+            }
+        }
+    }
+    
     func formatTime(reminderTime: Date) -> String {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
@@ -30,3 +66,4 @@ class EggAddReminderViewModel: ObservableObject {
         return "\(dateFormatter.string(from: reminderDate))"
     }
 }
+

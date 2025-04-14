@@ -29,4 +29,8 @@ struct EggAddReminderModel {
  
 }
 
-
+extension ReminderModel {
+    func isEmpty() -> Bool {
+        return name.isEmpty && date == Date(timeIntervalSince1970: 0) && time == Date(timeIntervalSince1970: 0)
+    }
+}

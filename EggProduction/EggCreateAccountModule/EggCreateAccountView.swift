@@ -15,11 +15,7 @@ struct EggCreateAccountView: View {
                 VStack {
                     HStack {
                         Button(action: {
-                            if UserDefaultsManager().isGuest() {
-                                eggCreateAccountModel.isOnb = true
-                            } else {
-                                presentationMode.wrappedValue.dismiss()
-                            }
+                            eggCreateAccountModel.isOnb = true
                         }) {
                             Image(systemName: "arrow.left")
                                 .foregroundStyle(.white)

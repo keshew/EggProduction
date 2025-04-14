@@ -348,7 +348,8 @@ struct TabBarItem: View {
 struct DateTF: View {
     @Binding var date: Date
     var text: String
-
+    @State private var selectedDate: Date = Date()
+    
     var body: some View {
         VStack {
             ZStack {
@@ -367,7 +368,7 @@ struct DateTF: View {
                             .Madimi(size: 18, color: .secondBrown)
                     }
                     
-           
+                    
                 }
                 .padding(.horizontal)
                 
@@ -380,6 +381,9 @@ struct DateTF: View {
                 .datePickerStyle(.compact)
                 .colorMultiply(.clear)
                 .frame(width: 175, height: 54)
+                .onChange(of: date, perform: { newDate in
+                    selectedDate = newDate
+                })
             }
             .labelsHidden()
             .frame(width: 175, height: 54)
@@ -395,7 +399,13 @@ struct DateTF: View {
 
 struct TimeTF: View {
     @Binding var time: Date
+    @Binding var date: Date
     var text: String
+    @State private var availableRange: ClosedRange<Date> = {
+        let now = Date()
+        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: now)!.addingTimeInterval(-1)
+        return now...endOfDay
+    }()
 
     var body: some View {
         VStack {
@@ -420,15 +430,36 @@ struct TimeTF: View {
                 DatePicker(
                     "Time",
                     selection: $time,
-                    in: Date()...,
+                    in: availableRange,
                     displayedComponents: [.hourAndMinute]
                 )
                 .datePickerStyle(.compact)
                 .colorMultiply(.clear)
                 .frame(width: 175, height: 54)
+                .onChange(of: date) { newDate in
+                    updateAvailableRange(for: newDate)
+                }
             }
             .labelsHidden()
             .frame(width: 175, height: 54)
         }
     }
+
+    private func updateAvailableRange(for date: Date) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let selectedDate = calendar.startOfDay(for: date)
+
+        if today == selectedDate {
+            time = Date(timeIntervalSince1970: 0)
+            let now = Date()
+            let endOfDay = calendar.date(byAdding: .day, value: 1, to: now)!.addingTimeInterval(-1)
+            self.availableRange = now...endOfDay
+        } else {
+            let startOfDay = calendar.startOfDay(for: date)
+            let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!.addingTimeInterval(-1)
+            self.availableRange = startOfDay...endOfDay
+        }
+    }
 }
+
