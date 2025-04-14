@@ -55,11 +55,14 @@ struct EggLogView: View {
                     
                     VStack(spacing: 15) {
                         Button(action: {
-                            if UserDefaultsManager().login(email: eggLogModel.email, password: eggLogModel.password) {
+                            if eggLogModel.email.isEmpty || eggLogModel.password.isEmpty {
+                                showAlert = true
+                                alertMessage = "Please fill all fields"
+                            } else if UserDefaultsManager().login(email: eggLogModel.email, password: eggLogModel.password) {
                                 eggLogModel.isTabBar = true
                             } else {
                                 showAlert = true
-                                alertMessage = "User already exist"
+                                alertMessage = "Invalid email or password"
                             }
                         }) {
                             Rectangle()
