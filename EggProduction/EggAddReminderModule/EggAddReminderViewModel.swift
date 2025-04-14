@@ -21,6 +21,9 @@ class EggAddReminderViewModel: ObservableObject {
         if let reminder = reminder {
             isNever = false
             first = false
+            print(reminder.date)
+            print(reminder.time)
+
             self.title = reminder.name
             self.desc = ""
             self.date = reminder.date

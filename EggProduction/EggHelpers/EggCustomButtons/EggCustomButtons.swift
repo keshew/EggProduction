@@ -443,14 +443,16 @@ struct TimeTF: View {
             .labelsHidden()
             .frame(width: 175, height: 54)
         }
+        .onAppear {
+            updateAvailableRange(for: date)
+        }
     }
 
     private func updateAvailableRange(for date: Date) {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
         let selectedDate = calendar.startOfDay(for: date)
-
-        if today == selectedDate {
+        
+        if calendar.isDateInToday(selectedDate) {
             time = Date(timeIntervalSince1970: 0)
             let now = Date()
             let endOfDay = calendar.date(byAdding: .day, value: 1, to: now)!.addingTimeInterval(-1)
@@ -461,5 +463,6 @@ struct TimeTF: View {
             self.availableRange = startOfDay...endOfDay
         }
     }
+
 }
 
