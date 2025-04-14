@@ -395,7 +395,7 @@ struct EggAddReminderView: View {
 }
 
 #Preview {
-    var isEditing = false
+    let isEditing = false
     EggAddReminderView(isEditing: isEditing, remindModel: ReminderModel(name: "",
                                                                         date: Date(),
                                                                         time: Date(),
